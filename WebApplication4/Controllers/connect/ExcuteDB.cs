@@ -26,6 +26,7 @@ namespace WebApplication4.Controllers.connect
             MySqlDataReader sqls = controlDB.ExcuteQuery($"SELECT * FROM {table}");
             while (true)
             {
+                sqls.Read();
                 UserInfor user = new UserInfor();
                 user.Id = sqls.GetInt16(0);
                 user.Username = sqls.GetString(1);
@@ -38,12 +39,12 @@ namespace WebApplication4.Controllers.connect
             }
             return users;
         }
-
         public UserInfor GetUserByID(String id)
         {
             MySqlDataReader sqls = controlDB.ExcuteQuery($"SELECT * FROM {table} WHERE id = {id}");
             while (true)
             {
+                sqls.Read();
                 UserInfor user = new UserInfor();
                 user.Id = sqls.GetInt16(0);
                 user.Username = sqls.GetString(1);
@@ -55,5 +56,25 @@ namespace WebApplication4.Controllers.connect
             return null;
 
         }
+        public UserInfor GetUserByUsernameAndPass(String username,String password)
+        {
+            MySqlDataReader sqls = controlDB.ExcuteQuery($"SELECT * FROM {table} WHERE username = '{username}' and password = '{password}'");
+            if (!sqls.HasRows)
+                return null;
+            while (true)
+            {
+
+                sqls.Read();
+                UserInfor user = new UserInfor();
+                user.Id = sqls.GetInt16(0);
+                user.Username = sqls.GetString(1);
+                user.Password = sqls.GetString(2);
+                user.Email = sqls.GetString(3);
+                user.Create_time = sqls.GetDateTime(4);
+                return user;
+            }
+            return null;
+        }
+
     }
 }
